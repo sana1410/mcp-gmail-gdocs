@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+*.log
+tokens.json
+idempotency.db
+idempotency.db-wal
+idempotency.db-shm
+audit.log
+.DS_Store
+Thumbs.db
+*.tgz
