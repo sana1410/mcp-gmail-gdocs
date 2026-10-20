@@ -13,11 +13,10 @@ async function main() {
 
   logger.info("Starting mcp-gmail-gdocs", { transport: config.MCP_TRANSPORT });
 
-  const { server } = createServer(config);
-
   if (config.MCP_TRANSPORT === "http") {
-    await startHttp(server, config);
+    await startHttp(() => createServer(config).server, config);
   } else {
+    const { server } = createServer(config);
     await startStdio(server);
   }
 }

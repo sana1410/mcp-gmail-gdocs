@@ -6,7 +6,9 @@ import type { Config } from "../config.js";
 import { getAllowedOrigins } from "../config.js";
 import { logger } from "../logger.js";
 
-export async function startHttp(server: McpServer, config: Config): Promise<void> {
+export type ServerFactory = () => McpServer;
+
+export async function startHttp(serverFactory: ServerFactory, config: Config): Promise<void> {
   const app = express();
   const allowedOrigins = getAllowedOrigins(config);
 
@@ -55,7 +57,8 @@ export async function startHttp(server: McpServer, config: Config): Promise<void
       if (sid) sessions.delete(sid);
     };
 
-    await server.connect(transport);
+    const sessionServer = serverFactory();
+    await sessionServer.connect(transport);
     await transport.handleRequest(req, res, req.body);
 
     const respSessionId = res.getHeader("mcp-session-id") as string | undefined;
